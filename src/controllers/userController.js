@@ -41,6 +41,11 @@ export const updateUser = async (req, res, next) => {
         return res.status(400).json({ message: "Please provide at least name or email" });
     }
     try {
+        // Check if user exists
+        const userExists = await userModel.getUserById(id);
+        if (!userExists) {
+            return res.status(404).json({ message: "User not found" });
+        }
         const user = await userModel.updateUser(name, email, id);
         res.status(200).json(user);
     } catch (error) {
